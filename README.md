@@ -1,4 +1,4 @@
-# Creative Robotics Portfolio | 创意机器人项目作品集
+# Creative Robotics Portfolio | 创意机器人项目作品集（毕业设计更新中）
 
 This repository documents selected robotics projects developed during my study in Creative Robotics. These projects explore the relationship between robotics, interaction, cultural narratives, and performance, combining physical prototyping, sensing, mechanical design, and human–robot interaction.
 
