@@ -18,6 +18,12 @@ AURAFLOW 是一个将中国传统文化“小六壬”的计算逻辑转化为�
 
 ![AURAFLOW](assets/AURAFLOW.png)
 
+在第18届社交机器人会议（伦敦）18th International Conference on Social Robotics (ICSR + ART 2026)
+
+闭幕式上，这个机器艺术装置参与了机器人舞台剧的演出
+
+![1001 nights with robots](assets/1001.png)
+
 
 # 1. 项目背景
 
