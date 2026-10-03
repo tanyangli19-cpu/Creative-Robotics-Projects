@@ -2,7 +2,7 @@
 
 This repository documents selected robotics projects developed during my study in Creative Robotics. These projects explore the relationship between robotics, interaction, cultural narratives, and performance, combining physical prototyping, sensing, mechanical design, and human–robot interaction.
 
-本仓库记录了我在 Creative Robotics 学习期间完成的部分机器人项目。这些项目探索机器人、交互、文化叙事与表演之间的关系，并结合实体原型、传感器、机械设计与人机交互进行实践。
+记录了我在 Creative Robotics 学习期间完成的部分机器人项目。这些项目探索机器人、交互、文化叙事与表演之间的关系，并结合实体原型、传感器、机械设计与人机交互进行实践。
 
 ---
 
