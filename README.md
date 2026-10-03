@@ -1,4 +1,4 @@
-# Robotics Portfolio | 机器人项目作品集
+# Creative Robotics Portfolio | 创意机器人项目作品集
 
 This repository documents selected robotics projects developed during my study in Creative Robotics. These projects explore the relationship between robotics, interaction, cultural narratives, and performance, combining physical prototyping, sensing, mechanical design, and human–robot interaction.
 
@@ -10,6 +10,8 @@ This repository documents selected robotics projects developed during my study i
 ## 项目一：小六壬传统文化机器人
 
 ### Overview | 项目简介
+
+Link: https://www.youtube.com/watch?v=r9fNzEMsPME
 
 This project explores how the traditional Chinese divination system **Xiao Liu Ren (小六壬)** can be transformed into an interactive robotic experience.
 
