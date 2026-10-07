@@ -6,9 +6,9 @@
 
 这是一个为 **1001 Nights** 机器人戏剧项目开发的仿生蛇机器人。
 
-项目最初来自一个很简单的想法：
+项目最初来自之前的方案,我曾经做过通过四个方向的超声波传感器感知物体靠近进而转动的机械臂底座
 
-> **如果把原本固定在桌面上的机械臂安装到一个可以移动的底盘上，它能不能变成一个具有角色和动作表达能力的机器人？**
+> **如果把机械臂安装到一个可以移动（转动）的底盘上，它能不能变成一个具有角色和动作表达能力的机器人？**
 
 在后续的舞台项目中，我们把这个想法发展成了一条机械蛇。
 
@@ -18,51 +18,43 @@
 - **简化后的机械臂**作为蛇头，用来表现头部姿态；
 - **8 个舵机组成的蛇尾**通过带有相位差的正弦波产生连续的蛇形波浪。
 
-最终机器人可以通过 **Xbox 手柄实时控制**。  
-操作者使用左摇杆控制麦克纳姆轮底盘，右摇杆控制蛇头，而蛇尾则由 Arduino 持续生成波浪运动。
+最终版本中，机器人可以通过 **Xbox 手柄实时控制** 
 
-<!-- 推荐：这里放最终机器人主图 -->
+操作者使用左摇杆控制麦克纳姆轮底盘，右摇杆控制蛇头，而蛇尾则由 Arduino 持续生成波浪运动。
 
 ![Final Biomimetic Snake Robot](assets/final-robot.jpg)
 
-<!-- 推荐：如果有较短 GIF，可以直接放在主图下面 -->
 
-<!-- ![Robot Demo](assets/final-demo.gif) -->
+## 项目信息
 
----
+**名称:** Biomimetic Snake Robot / 仿生蛇形机器人  
+**场景:** 1001 Nights Robot Theatre  
+**关键词:** Creative Robotics / Physical Computing / Mechatronics  
+**主控制器:** Arduino  
+**舵机控制:** PCA9685  
+**马达控制:** 2 × SN754410NE  
+**输入方式:** Xbox Controller + Python  
+**移动:** Four-wheel Mecanum Base （4 × N20 Motors）  
+**舵机:** 8 × MF90，2 × MG996R 
+**蛇尾关节数量:** 8  
 
-## Project Information
+### 个人职责
 
-**Project:** Biomimetic Snake Robot  
-**Type:** Team Project  
-**Context:** 1001 Nights Robot Theatre  
-**Field:** Creative Robotics / Physical Computing / Mechatronics  
-**Main Controller:** Arduino  
-**Servo Driver:** PCA9685  
-**Motor Driver:** 2 × SN754410NE  
-**Input:** Xbox Controller + Python  
-**Mobility:** Four-wheel Mecanum Base  
-**Active Servos:** 10  
-**Tail Joints:** 8  
-
-### My Main Responsibilities
-
-在这个团队项目中，我主要负责：
+在这个项目中，我主要负责：
 
 - 蛇尾机械结构的后续迭代
 - 舵机、锁孔、连接件和底盘接口的重新测量
 - 3D 打印和装配测试
 - 舵机回正与校准代码
 - 八舵机蛇形波浪运动代码
-- 基于相位差正弦波的 gait control
+- 基于相位差正弦波的八舵机蛇尾波浪运动控制
 - 早期键盘控制方案
 - 电路接线与系统调试
 - ESP32 过热和可能的电流回流问题排查
 - 麦轮底盘、蛇头和蛇尾的整机集成测试
 
----
 
-# 1. Introduction
+# 1. Introduction 简介
 
 这个项目的目标并不是制造一条在生物学上完全真实的机器蛇。
 
@@ -94,25 +86,10 @@ Eight-Servo Tail
 
 蛇尾则不需要推动机器人前进，它的主要任务是产生明显的波浪动作，让整个机器人在移动过程中更像一个有生命的机械动物。
 
-这种设计把：
+需要指出的是，蛇尾的正弦波同样会实现前进，但是速度较慢且转向不会很灵活
 
-```text
-Mobility
-```
 
-和：
-
-```text
-Biomimetic Motion
-```
-
-分开处理。
-
-这样不仅降低了系统复杂度，也让不同的机器人模块可以分别设计、测试和调试。
-
----
-
-# 2. Design Development
+# 2. Design Development 设计发展
 
 项目早期并没有直接确定现在看到的八舵机蛇尾。
 
@@ -144,9 +121,8 @@ Reduced Robotic Arm Head
 Eight-Servo Articulated Tail
 ```
 
----
 
-# 3. System Architecture
+# 3. System Architecture 系统结构
 
 最终机器人可以分为四个主要系统：
 
@@ -194,9 +170,8 @@ Mecanum Base
 
 > **10 个 active servos**
 
----
 
-# 4. Robotic Arm Head
+# 4. Robotic Arm Head 机械臂蛇头
 
 机械臂结构来自之前的机器人实验。
 
@@ -229,13 +204,10 @@ Mecanum Base
 
 最终版本保留两个主动控制的蛇头舵机。
 
-<!-- 插入蛇头照片 -->
-
 ![Robotic Arm Head](assets/robotic-arm-head.jpg)
 
----
 
-# 5. Mecanum Mobile Base
+# 5. Mecanum Mobile Base 麦轮移动底座
 
 机器人底盘使用四个麦克纳姆轮。
 
@@ -266,23 +238,14 @@ Rear Left        Rear Right
 
 一个 SN754410NE 可以控制两个电机，因此两个芯片可以覆盖四轮底盘。
 
-<!-- 插入底盘照片 -->
-
 ![Mecanum Base](assets/mecanum-base.jpg)
 
----
 
-# 6. Motor Driver Development
+# 6. Motor Driver Development 电机驱动
 
 电机驱动系统经历了多个阶段。
 
-最开始，我们先使用：
-
-```text
-Breadboard
-```
-
-验证一个 SN754410NE 是否可以正常驱动两个 N20 电机。
+最开始，我们先使用面包板来验证了SN754410NE 是否可以正常驱动两个 N20 电机。
 
 验证成功后，再扩展到四个电机。
 
@@ -298,41 +261,17 @@ Breadboard
 
 这也成为整个项目中非常重要的一次系统调试经历。
 
-<!-- 插入面包板 / 控制板照片 -->
-
 ![Motor Driver Development](assets/motor-driver-development.jpg)
 
 ---
 
-# 7. Eight-Servo Tail
+# 7. Eight-Servo Tail 八舵机蛇尾
 
 蛇尾是整个机器人最明显的仿生部分。
 
-最终蛇尾由：
-
-> **8 个 MF90 舵机**
-
-组成。
+最终蛇尾由**8 个 MF90 舵机**组成。
 
 每一个舵机都可以理解为蛇身体上的一个关节。
-
-```text
-Joint 0
-   ↓
-Joint 1
-   ↓
-Joint 2
-   ↓
-Joint 3
-   ↓
-Joint 4
-   ↓
-Joint 5
-   ↓
-Joint 6
-   ↓
-Joint 7
-```
 
 这些舵机之间通过 3D 打印结构连接。
 
@@ -345,13 +284,10 @@ Joint 7
 - 支撑蛇尾重量
 - 安装辅助小轮
 
-<!-- 插入最终蛇尾 -->
-
 ![Eight Servo Tail](assets/eight-servo-tail.jpg)
 
----
 
-# 8. Tail Mechanical Iteration
+# 8. Tail Mechanical Iteration 蛇尾迭代
 
 蛇尾并不是一次打印成功的。
 
@@ -371,8 +307,6 @@ Measurement
 Redesign
 ```
 
----
-
 ## 8.1 Version 1
 
 第一版已经包含了几个关键结构：
@@ -388,7 +322,6 @@ Redesign
 
 由于没有充分考虑打印机误差和装配公差，部分舵机无法顺利装入。
 
----
 
 ## 8.2 Version 2
 
@@ -410,8 +343,6 @@ Programmed Angle
 Real Joint Angle
 ```
 
----
-
 ## 8.3 Version 3
 
 第三版重新测量了：
@@ -426,17 +357,14 @@ Real Joint Angle
 
 这一版本最终成为实际使用的蛇尾结构。
 
-<!-- 强烈推荐：这里放三个版本零件对比 -->
-
 ![Tail Iterations](assets/tail-iterations.jpg)
 
 这个过程让我第一次非常直接地理解：
 
 > **机器人中的 CAD 模型只是设计的开始，真实尺寸、公差、材料和装配方式最终都会影响机械结构能不能真正工作。**
 
----
 
-# 9. Servo Centering
+# 9. Servo Centering 舵机校准
 
 在正式安装蛇尾之前，还需要解决一个基础问题：
 
@@ -474,25 +402,12 @@ for (int i = 0; i < 8; i++) {
 
 完成回正后，再进行机械装配。
 
-<!-- 插入回正代码截图 -->
-
 ![Servo Centering](assets/servo-centering.png)
 
----
 
-# 10. Serpentine Gait
+# 10. Serpentine Gait 蛇形步态
 
 如果八个舵机同时进行完全相同的左右摆动：
-
-```text
-Servo 0  → → →
-
-Servo 1  → → →
-
-Servo 2  → → →
-
-Servo 3  → → →
-```
 
 那么整个蛇尾只会一起摆动。
 
@@ -504,7 +419,7 @@ Servo 3  → → →
 
 ---
 
-## 10.1 Core Equation
+## 10.1 Core Equation 核心公式
 
 蛇尾使用带有相位差的正弦波：
 
@@ -535,7 +450,7 @@ float offsetAngle = 90.0;
 
 ---
 
-## 10.2 Why Phase Shift Matters
+## 10.2 Why Phase Shift Matters 相位差重要性
 
 如果：
 
@@ -562,8 +477,6 @@ Joint 4            ~~~~~~~
 波形就会沿着蛇尾传播。
 
 从视觉上看，蛇尾会形成一个连续移动的曲线。
-
-<!-- 这里非常推荐放 GIF -->
 
 ![Serpentine Gait](assets/tail-gait.gif)
 
@@ -597,11 +510,10 @@ Visual Snake Motion
 
 机器人真正的移动则由四个 N20 电机完成。
 
-对于舞台机器人来说，这种方式更加容易控制，也更加稳定。
+对于舞台机器人来说，这种方式更加容易控制，也更加稳定，最重要的速度更快，更敏捷。
 
----
 
-# 12. PCA9685 Servo Control
+# 12. PCA9685 Servo Control 电机控制
 
 机器人中存在多个舵机。
 
@@ -652,9 +564,8 @@ Target Angle
 
 这让多舵机控制更加清晰。
 
----
 
-# 13. Xbox Controller
+# 13. Xbox Controller 手柄控制
 
 项目早期首先使用键盘控制麦克纳姆轮。
 
@@ -665,7 +576,7 @@ Target Angle
 - 左右运动
 - 停止
 
-之后 Haonan Li 在这个基础上进一步开发了 Python 上位机和 Xbox Controller 控制方式。
+之后我和队友 Haonan Li 在这个基础上进一步开发了 Python 上位机和 Xbox Controller 控制方式。
 
 最终的控制链路为：
 
@@ -683,9 +594,8 @@ Xbox Controller
 
 最终操作者不需要通过键盘输入，而可以直接使用手柄控制机器人。
 
----
 
-# 14. Controller Mapping
+# 14. Controller Mapping 
 
 Python 会读取 Xbox Controller 的两个摇杆。
 
@@ -723,19 +633,18 @@ Snake Head
 
 最终操作方式可以简单理解成：
 
-> **左摇杆控制机器人去哪里，右摇杆控制蛇头看哪里。**
+> **左摇杆控制机器人去哪里，右摇杆控制蛇头起伏。**
 
 同时：
 
 > **八舵机蛇尾继续自动执行波浪运动。**
 
-<!-- 推荐放手柄操作 GIF -->
 
 ![Xbox Controller Demo](assets/controller-demo.gif)
 
 ---
 
-# 15. Parallel Motion
+# 15. Parallel Motion 并行运动
 
 最终系统一个比较重要的特点是：
 
@@ -784,9 +693,8 @@ Wave Tail
 
 同时进行。
 
----
 
-# 16. Manual Control + Procedural Motion
+# 16. Manual Control + Procedural Motion 最终控制（实际演出）
 
 最终机器人并不是一个完全自主机器人。
 
@@ -823,9 +731,8 @@ Wave Tail
 
 这样可以减少操作者需要实时控制的变量。
 
----
 
-# 17. Electronics and Wiring
+# 17. Electronics and Wiring 电路信息
 
 整个机器人同时包含：
 
@@ -857,13 +764,10 @@ ESP32 Experiment
 Back to Arduino
 ```
 
-<!-- 插入电路照片 -->
-
 ![Electronics](assets/electronics.jpg)
 
----
 
-# 18. ESP32 Experiment
+# 18. ESP32 Experiment 主板迭代尝试
 
 在 Arduino 控制版本工作后，我们曾经尝试改用 ESP32。
 
@@ -897,13 +801,9 @@ Arduino
 Final Version
 ```
 
-<!-- ESP32 / Arduino 对比 -->
-
 ![Arduino and ESP32 Test](assets/controller-board-comparison.jpg)
 
----
-
-# 19. Power Problems
+# 19. Power Problems 供电问题
 
 供电是整个项目中最重要的实际问题之一。
 
@@ -933,17 +833,16 @@ Main Controller
 
 在后续版本中，电机、舵机和逻辑电路应该拥有更加清晰的供电规划。
 
----
+最终我们发现问题是由于，给主板供电的电池，电流反向传给了主板
 
-# 20. Failure-Driven Design
+导致了主板芯片过热击穿，我们调整了供电方案，将电池的电流首先通过主板，解决了这个问题
+
+
+# 20. Failure-Driven Design 失败驱动
 
 这个项目中很多重要的设计决定，并不是来自最开始的方案。
 
-而是来自：
-
-> **失败。**
-
----
+而是来自：**一次次出现的失败**
 
 ## 20.1 3D Printing Tolerance
 
@@ -963,7 +862,6 @@ Main Controller
 
 重新测量并制作新的连接件。
 
----
 
 ## 20.2 Servo Horn Slipping
 
@@ -975,7 +873,6 @@ Main Controller
 
 重新设计锁孔和连接区域。
 
----
 
 ## 20.3 Wiring Complexity
 
@@ -997,7 +894,6 @@ System Integration
 
 逐步进行。
 
----
 
 ## 20.4 ESP32 Overheating
 
@@ -1009,7 +905,6 @@ ESP32 在测试过程中出现异常发热。
 
 为了安全性和可靠性，最终重新使用 Arduino。
 
----
 
 ## 20.5 Servo Current Peaks
 
@@ -1027,7 +922,6 @@ Servo Power
 Logic Power
 ```
 
----
 
 # 21. Reliability Before Complexity
 
@@ -1051,7 +945,6 @@ Logic Power
 
 > **能够稳定重复的简单动作，比偶尔成功的复杂动作更有价值。**
 
----
 
 # 22. Final System
 
