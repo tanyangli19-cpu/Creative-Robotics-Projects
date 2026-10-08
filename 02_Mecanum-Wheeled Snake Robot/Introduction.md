@@ -181,7 +181,7 @@ Mecanum Base
 
 在早期项目中，机械臂底座周围安装了超声波传感器。当某一个方向有物体接近时，机械臂可以转向对应方向。
 
-![超声波底座](assets/超声波底座.jpg)
+<img src="assets/超声波底座.jpg" alt="超声波底座" width="500">
 
 但是这个机械臂也暴露出了一个结构问题：
 
@@ -266,7 +266,7 @@ Rear Left        Rear Right
 
 这也成为整个项目中非常重要的一次系统调试经历。
 
-![控制板](assets/焊接控制板.jpg)
+<img src="assets/焊接控制板.jpg" alt="控制板" width="300">
 
 
 # 7. Eight-Servo Tail 八舵机蛇尾
@@ -757,7 +757,7 @@ Back to Arduino
 
 在 Arduino 控制版本工作后，我们曾经尝试改用 ESP32。
 
-![Esp32](assets/ESP32.jpg)
+<img src="assets/ESP32.jpg" alt="Esp32" width="300">
 
 主要原因是希望：
 
@@ -805,7 +805,7 @@ Main Controller
 
 这确实是整个项目环节中，最关键最严重的问题
 
-![Electronics](assets/electronics.jpg)
+<img src="assets/electronics.jpg" alt="Electronics" width="300">
 
 # 19. Final System
 
