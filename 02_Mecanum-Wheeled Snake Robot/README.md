@@ -28,6 +28,9 @@
 
 ![Final Biomimetic Snake Robot](assets/final-robot.png)
 
+访问链接获取更多项目视频 https://drive.google.com/drive/folders/1l7iNLzpzVcWRPiz366XtCO11-j1wN6Eo?usp=sharing
+
+
 
 ## 项目信息
 
