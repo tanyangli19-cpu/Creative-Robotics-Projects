@@ -2,13 +2,17 @@
 
 ## 基于麦克纳姆轮底盘的仿生蛇形舞台机器人
 
-> **Mecanum Base · Robotic Arm Head · Eight-Servo Tail · Xbox Control**
+**Mecanum Base · Robotic Arm Head · Eight-Servo Tail · Xbox Control**
 
 这是一个为 **1001 Nights** 机器人戏剧项目开发的仿生蛇机器人。
 
+链接: **https://hoomansamani.com/creative-robotics/creative-robotic-theatre/1001-nights-with-robots/**
+
 项目最初来自之前的方案,我曾经做过通过四个方向的超声波传感器感知物体靠近进而转动的机械臂底座
 
-> **如果把机械臂安装到一个可以移动（转动）的底盘上，它能不能变成一个具有角色和动作表达能力的机器人？**
+<video controls src="assets/可移动平台.mp4" title="Title"></video>
+
+**如果把机械臂安装到一个可以移动（转动）的底盘上，它能不能变成一个具有角色和动作表达能力的机器人？**
 
 在后续的舞台项目中，我们把这个想法发展成了一条机械蛇。
 
@@ -22,7 +26,7 @@
 
 操作者使用左摇杆控制麦克纳姆轮底盘，右摇杆控制蛇头，而蛇尾则由 Arduino 持续生成波浪运动。
 
-![Final Biomimetic Snake Robot](assets/final-robot.jpg)
+![Final Biomimetic Snake Robot](assets/final-robot.png)
 
 
 ## 项目信息
@@ -88,6 +92,7 @@ Eight-Servo Tail
 
 需要指出的是，蛇尾的正弦波同样会实现前进，但是速度较慢且转向不会很灵活
 
+![麦轮车图示](assets/麦轮车.jpg)
 
 # 2. Design Development 设计发展
 
@@ -120,7 +125,6 @@ Reduced Robotic Arm Head
           +
 Eight-Servo Articulated Tail
 ```
-
 
 # 3. System Architecture 系统结构
 
@@ -177,6 +181,8 @@ Mecanum Base
 
 在早期项目中，机械臂底座周围安装了超声波传感器。当某一个方向有物体接近时，机械臂可以转向对应方向。
 
+![超声波底座](assets/超声波底座.jpg)
+
 但是这个机械臂也暴露出了一个结构问题：
 
 > 为了支撑上部结构，底部一侧需要加强固定，因此机械臂并不能自由完成 360° 转动。
@@ -203,8 +209,6 @@ Mecanum Base
 - 保留蛇头需要的动作
 
 最终版本保留两个主动控制的蛇头舵机。
-
-![Robotic Arm Head](assets/robotic-arm-head.jpg)
 
 
 # 5. Mecanum Mobile Base 麦轮移动底座
@@ -238,8 +242,7 @@ Rear Left        Rear Right
 
 一个 SN754410NE 可以控制两个电机，因此两个芯片可以覆盖四轮底盘。
 
-![Mecanum Base](assets/mecanum-base.jpg)
-
+<video controls src="assets/麦轮演示.mp4" title="Title"></video>
 
 # 6. Motor Driver Development 电机驱动
 
@@ -251,6 +254,8 @@ Rear Left        Rear Right
 
 之后团队制作了面向 Arduino 的手工焊接控制板，希望减少大量面包板跳线。
 
+由于是手工焊接，出现了多次接触不良的情况，经过多次电路逐步解决了问题，提高了稳定性
+
 在此基础上，我们还尝试制作 ESP32 版本，希望：
 
 - 减少线路
@@ -261,9 +266,8 @@ Rear Left        Rear Right
 
 这也成为整个项目中非常重要的一次系统调试经历。
 
-![Motor Driver Development](assets/motor-driver-development.jpg)
+![控制板](assets/焊接控制板.jpg)
 
----
 
 # 7. Eight-Servo Tail 八舵机蛇尾
 
@@ -322,6 +326,7 @@ Redesign
 
 由于没有充分考虑打印机误差和装配公差，部分舵机无法顺利装入。
 
+![模型](assets/模型.png)
 
 ## 8.2 Version 2
 
@@ -359,10 +364,6 @@ Real Joint Angle
 
 ![Tail Iterations](assets/tail-iterations.jpg)
 
-这个过程让我第一次非常直接地理解：
-
-> **机器人中的 CAD 模型只是设计的开始，真实尺寸、公差、材料和装配方式最终都会影响机械结构能不能真正工作。**
-
 
 # 9. Servo Centering 舵机校准
 
@@ -392,14 +393,6 @@ Mechanical Centre
 
 可以尽可能保持一致。
 
-基础逻辑类似：
-
-```cpp
-for (int i = 0; i < 8; i++) {
-    setServoAngle(i, 90);
-}
-```
-
 完成回正后，再进行机械装配。
 
 ![Servo Centering](assets/servo-centering.png)
@@ -417,7 +410,6 @@ for (int i = 0; i < 8; i++) {
 
 > **让相邻关节之间存在一定的相位差。**
 
----
 
 ## 10.1 Core Equation 核心公式
 
@@ -448,7 +440,7 @@ float phaseShift = PI / 4.0;
 float offsetAngle = 90.0;
 ```
 
----
+![公式](assets/公式.png)
 
 ## 10.2 Why Phase Shift Matters 相位差重要性
 
@@ -478,11 +470,9 @@ Joint 4            ~~~~~~~
 
 从视觉上看，蛇尾会形成一个连续移动的曲线。
 
-![Serpentine Gait](assets/tail-gait.gif)
+<video controls src="assets/蛇形波.mp4" title="Title"></video>
 
----
-
-# 11. Why the Tail Does Not Propel the Robot
+# *11. Why the Tail Does Not Propel the Robot 为什么尾巴不能推动机器人
 
 从理论上来说，真实蛇可以通过身体波浪与地面摩擦产生推进力。
 
@@ -595,7 +585,7 @@ Xbox Controller
 最终操作者不需要通过键盘输入，而可以直接使用手柄控制机器人。
 
 
-# 14. Controller Mapping 
+# 14. Controller Mapping 手柄控制
 
 Python 会读取 Xbox Controller 的两个摇杆。
 
@@ -639,10 +629,6 @@ Snake Head
 
 > **八舵机蛇尾继续自动执行波浪运动。**
 
-
-![Xbox Controller Demo](assets/controller-demo.gif)
-
----
 
 # 15. Parallel Motion 并行运动
 
@@ -764,12 +750,14 @@ ESP32 Experiment
 Back to Arduino
 ```
 
-![Electronics](assets/electronics.jpg)
 
+# 18. Power Problems 供电问题
 
-# 18. ESP32 Experiment 主板迭代尝试
+供电是整个项目中最重要的实际问题之一。
 
 在 Arduino 控制版本工作后，我们曾经尝试改用 ESP32。
+
+![Esp32](assets/ESP32.jpg)
 
 主要原因是希望：
 
@@ -779,35 +767,15 @@ Back to Arduino
 
 因此团队重新制作了面向 ESP32 的电机控制板。
 
-但是在接线和烧录测试过程中，一块 ESP32 出现了明显过热。
-
-随后系统中还出现过：
-
-- 主板异常发热
-- 电池连接线过热
-- 供电路径异常
+但是在接线和烧录测试过程中，两块 ESP32 出现了明显过热。
 
 这些问题说明系统中可能存在异常电流路径或供电设计问题。
 
-为了安全完成最终演示，我们最终决定：
+经过安全排查我们没有发现明显问题，我们又尝试改回Arduino
 
-```text
-ESP32
-   ↓
-Abandoned
+接下来，我们进一步发现改回Arduino，有的型号也出现了过热问题
 
-Arduino
-   ↓
-Final Version
-```
-
-![Arduino and ESP32 Test](assets/controller-board-comparison.jpg)
-
-# 19. Power Problems 供电问题
-
-供电是整个项目中最重要的实际问题之一。
-
-机器人需要同时驱动：
+这可能是因为机器人需要同时驱动：
 
 ```text
 4 DC Motors
@@ -819,7 +787,7 @@ Main Controller
 
 多个舵机同时运动时，会出现较高的瞬时电流需求。
 
-在测试过程中，我们观察到：
+在进一步测试过程中，我们观察到：
 
 - 电机负载时不稳定
 - 舵机负载时不稳定
@@ -827,126 +795,19 @@ Main Controller
 - 电池线路过热
 - ESP32 异常过热
 
-这些问题让我认识到：
+最严重的就是导致了主板芯片击穿报废，同时还发生了一次电池仓线烧毁
 
-> **机器人供电不能只根据元件标称电压进行设计，还必须考虑真实负载下的电流。**
-
-在后续版本中，电机、舵机和逻辑电路应该拥有更加清晰的供电规划。
+![Electronics](assets/电路受损.png)
 
 最终我们发现问题是由于，给主板供电的电池，电流反向传给了主板
 
 导致了主板芯片过热击穿，我们调整了供电方案，将电池的电流首先通过主板，解决了这个问题
 
+这确实是整个项目环节中，最关键最严重的问题
 
-# 20. Failure-Driven Design 失败驱动
+![Electronics](assets/electronics.jpg)
 
-这个项目中很多重要的设计决定，并不是来自最开始的方案。
-
-而是来自：**一次次出现的失败**
-
-## 20.1 3D Printing Tolerance
-
-**问题：**
-
-第一版蛇尾在 CAD 中尺寸正确，但是打印后无法顺利装配。
-
-**原因：**
-
-没有充分考虑：
-
-- 打印误差
-- 舵机真实尺寸
-- 装配公差
-
-**结果：**
-
-重新测量并制作新的连接件。
-
-
-## 20.2 Servo Horn Slipping
-
-**问题：**
-
-第二版结构运行后连接位置可能发生滑动。
-
-**结果：**
-
-重新设计锁孔和连接区域。
-
-
-## 20.3 Wiring Complexity
-
-**问题：**
-
-把更多线路集成到一块板上虽然可以减少线材，但是故障反而更难定位。
-
-**结果：**
-
-认识到系统应该按照：
-
-```text
-Individual Module Test
-        ↓
-Subsystem Test
-        ↓
-System Integration
-```
-
-逐步进行。
-
-
-## 20.4 ESP32 Overheating
-
-**问题：**
-
-ESP32 在测试过程中出现异常发热。
-
-**结果：**
-
-为了安全性和可靠性，最终重新使用 Arduino。
-
-
-## 20.5 Servo Current Peaks
-
-**问题：**
-
-多个舵机同时运动会产生较高峰值电流。
-
-**结果：**
-
-认识到后续版本应该更清楚地规划：
-
-```text
-Motor Power
-Servo Power
-Logic Power
-```
-
-
-# 21. Reliability Before Complexity
-
-这个项目让我逐渐认识到：
-
-> **机器人功能更多，并不一定意味着机器人更好。**
-
-在实际舞台环境中，更重要的是：
-
-- 动作可以预测
-- 控制足够直接
-- 系统可以重复运行
-- 供电安全
-- 出现问题后容易检查
-
-因此最终机器人没有继续增加更多自由度或更多控制功能。
-
-相反，我们简化了蛇头动作，并优先保证整个系统能够完成最终表演。
-
-对于一个舞台机器人：
-
-> **能够稳定重复的简单动作，比偶尔成功的复杂动作更有价值。**
-
-
-# 22. Final System
+# 19. Final System
 
 最终原型成功整合了：
 
@@ -973,29 +834,10 @@ Xbox Controller
 - 持续生成蛇尾波浪
 - 使用 Xbox 手柄进行实时控制
 
-<!-- 推荐这里放最完整的一段 GIF -->
+<video controls src="assets/final.mp4" title="Title"></video>
 
-![Final Robot Demo](assets/final-demo.gif)
 
----
-
-# 23. Demo Videos
-
-## Full Robot Demo
-
-[![Watch Full Robot Demo](assets/final-video-cover.jpg)](YOUR_VIDEO_LINK)
-
-## Xbox Controller Demo
-
-[![Watch Xbox Controller Demo](assets/controller-video-cover.jpg)](YOUR_CONTROLLER_VIDEO_LINK)
-
-## 1001 Nights Performance
-
-[![Watch Stage Performance](assets/stage-video-cover.jpg)](YOUR_STAGE_VIDEO_LINK)
-
----
-
-# 24. Current Limitations
+# 20. Current Limitations 当前限制
 
 虽然最终机器人已经能够完成基本舞台动作，但它仍然主要是一个：
 
@@ -1026,15 +868,13 @@ Robot Motion
 
 而不是完全自主的机器人。
 
----
 
-# 25. Next Iteration
+# 21. Next Iteration 未来方向
 
 如果继续开发这个项目，我认为下面几个方向最值得优先改进。
 
----
 
-## 25.1 Closed-Loop Sensing
+## 21.1 Closed-Loop Sensing
 
 加入：
 
@@ -1046,9 +886,8 @@ Robot Motion
 
 未来可以让蛇头根据演员或目标的位置自动调整姿态。
 
----
 
-## 25.2 Tail and Base Coordination
+## 21.2 Tail and Base Coordination
 
 目前：
 
@@ -1082,9 +921,8 @@ Tail Motion
 
 这样整个机器人会更像一个统一的身体，而不是“移动小车 + 摆动尾巴”。
 
----
 
-## 25.3 Better Power System
+## 21.3 Better Power System
 
 当前系统仍然需要分别考虑：
 
@@ -1101,9 +939,8 @@ Tail Motion
 - Safety
 - Runtime
 
----
 
-## 25.4 Better Balance
+## 21.4 Better Balance
 
 蛇头向前伸出时，会让机器人重心向前移动。
 
@@ -1115,9 +952,8 @@ Tail Motion
 
 提高整体稳定性。
 
----
 
-## 25.5 Better Wiring
+## 21.5 Better Wiring
 
 机器人最终线路仍然比较密集。
 
@@ -1129,268 +965,29 @@ Tail Motion
 - Maintenance Access
 - Fault Isolation
 
-目标是：
+目标是：**维修一个模块时，不需要拆开整个机器人。**
 
-> **维修一个模块时，不需要拆开整个机器人。**
 
----
-
-# 26. Reflection
-
-这个项目让我第一次比较完整地经历了一个机器人系统从设计到运行的过程：
-
-```text
-Concept
-   ↓
-Mechanical Design
-   ↓
-3D Printing
-   ↓
-Servo Control
-   ↓
-Motor Driving
-   ↓
-Electronics
-   ↓
-Programming
-   ↓
-System Integration
-   ↓
-Debugging
-   ↓
-Final Demonstration
-```
-
-这个过程让我认识到：
-
-> **机器人不是单独的软件、机械或者电子系统，而是这些部分共同工作的结果。**
-
----
-
-## 26.1 Mechanical Design
-
-蛇尾结构让我更清楚地理解：
-
-> CAD 模型正确，并不代表真实零件一定能够正常装配。
-
-真实机器人设计还必须考虑：
-
-- Printing Tolerance
-- Physical Measurement
-- Assembly Space
-- Locking Method
-- Mechanical Stress
-
----
-
-## 26.2 Multi-Servo Control
-
-从代码上来说，让多个舵机得到不同角度并不复杂。
-
-但是当舵机数量增加后，问题很快会从：
-
-```text
-Programming
-```
-
-扩展到：
-
-```text
-Power
-+
-Mechanical Load
-+
-Timing
-+
-Wiring
-+
-Calibration
-```
-
-这让我第一次真正理解多舵机机器人是一个系统问题，而不仅仅是程序问题。
-
----
-
-## 26.3 Debugging
-
-项目过程中出现过：
-
-- 打印件无法安装
-- Servo Horn 滑动
-- 电机供电不稳定
-- ESP32 过热
-- 电池线路过热
-- 可能的电流回流
-
-这些问题最初看起来都是“失败”。
-
-但最终它们帮助我们理解了：
-
-> 哪些设计在真实机器人上是可靠的，哪些设计只是理论上可行。
-
----
-
-## 26.4 From “It Moves” to “It Moves Reliably”
-
-这个项目最开始的目标很简单：
-
-> 让机器人动起来。
-
-但完成整个系统之后，我认为更重要的问题已经变成：
-
-> **它能不能稳定地再次完成同样的动作？**
-
-如果继续开发，我会更加重视：
-
-- Reliability
-- Repairability
-- Power Management
-- Closed-loop Sensing
-- Modular Design
-
----
-
-# 27. My Contribution
-
-这是一个团队合作项目。
-
-我的主要工作集中在蛇尾结构、运动控制和整机调试。
-
-### Mechanical Development
-
-- 后续蛇尾结构版本修改
-- 舵机尺寸重新测量
-- Locking hole 调整
-- Connector geometry 调整
-- Chassis interface 调整
-- 3D printing
-- Assembly testing
-
-### Motion Control
-
-- Servo centering script
-- Eight-servo tail control
-- Phase-shifted sine-wave gait
-- Gait parameter testing
-- Early keyboard control
-
-### System Debugging
-
-- Wiring
-- Controller testing
-- ESP32 overheating investigation
-- Power backflow troubleshooting
-- Full-system integration
-- Mecanum / Head / Tail combined testing
-
----
-
-# 28. Team Contribution
-
-## Tanyang Li
-
-主要负责：
-
-- Tail iteration
-- 3D printing
-- Servo measurement
-- Mechanical redesign
-- Servo centering
-- Phase-shifted gait code
-- Initial keyboard control
-- Wiring and debugging
-- System integration
-
-## Haonan Li
-
-主要负责：
-
-- Early tail structure
-- First tail CAD model
-- Motor-driver soldering
-- Controller-board fabrication
-- Connector and cable organisation
-- Python control interface
-- Xbox controller workflow
-
-## Shared Work
-
-共同完成：
-
-- Robotic arm assembly
-- PCA9685 integration
-- Electronics testing
-- Full robot assembly
-- Motion tuning
-- Final stage testing
-
----
-
-# 29. Repository Structure
+# 22. Repository Structure 文件结构
 
 ```text
 02_Biomimetic_Snake_Robot/
 │
-├── README.md
+├── Introduction.md
 ├── Report.pdf
+├── Project_Slide.pdf
 │
-├── assets/
-│   ├── final-robot.jpg
-│   ├── final-demo.gif
-│   ├── robotic-arm-head.jpg
-│   ├── mecanum-base.jpg
-│   ├── motor-driver-development.jpg
-│   ├── eight-servo-tail.jpg
-│   ├── tail-iterations.jpg
-│   ├── tail-gait.gif
-│   ├── servo-centering.png
-│   ├── electronics.jpg
-│   ├── controller-board-comparison.jpg
-│   └── controller-demo.gif
+├── assets/             //项目图片
 │
-├── Arduino/
-│   └── SnakeRobot/
-│       └── SnakeRobot.ino
-│
-├── Python/
-│   └── xbox_controller.py
+├── control/
+│   ├── dance/          //舞台表演舞蹈部分
+│   ├── final1/         //汇报演示代码
+│   ├── testservo1/     //舵机测试代码代码
 │
 └── CAD/
-    └── tail-connectors/
+    ├── S1/             //初代模型
+    ├── S2/             //迭代模型及打印文件
 ```
 
----
-
-# 30. Summary
-
-这个项目最终并不是在尝试复制一条真正的蛇。
-
-我们做的是：
-
-> **把复杂的蛇形运动拆解成几个可以设计、编程和控制的机器人行为。**
-
-最终：
-
-```text
-Mecanum Base
-      ↓
-Reliable Mobility
-
-Robotic Arm Head
-      ↓
-Expressive Gesture
-
-Eight-Servo Tail
-      ↓
-Travelling Wave
-
-Xbox Controller
-      ↓
-Real-time Stage Control
-```
-
-这些不同的系统最终被组合成一个完整的机器人。
-
-对我来说，这个项目最重要的收获并不是单独学会某一种硬件或代码，而是开始理解：
-
-> **一个真正能够工作的机器人，是机械、电子、控制、供电、软件和调试共同组成的系统。**
+**感谢 UAL-CCI 技术辅助团队对电路排查方面给予的指导和帮助**  
+**Special thanks to the UAL-CCI Technical Support Team for their guidance and assistance with circuit troubleshooting.**
