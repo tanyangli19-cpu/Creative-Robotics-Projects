@@ -973,7 +973,7 @@ Tail Motion
 ```text
 02_Biomimetic_Snake_Robot/
 │
-├── Introduction.md
+├── README.md
 ├── Report.pdf
 ├── Project_Slide.pdf
 │
